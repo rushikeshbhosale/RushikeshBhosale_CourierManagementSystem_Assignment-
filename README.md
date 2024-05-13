@@ -3,6 +3,11 @@
 ## Introduction
 Welcome to the Courier Management System project! This project aims to implement a comprehensive system for managing courier operations, including customer orders, courier assignments, package tracking, employee management, and more. The system is designed to be scalable, efficient, and user-friendly, providing robust functionalities for both customers and administrative staff.
 
+## Technologies Used - 
+- **Python**
+- **MySQL**
+- **GIT**
+
 ## Project Structure
 The project follows a modular structure, with different components organized into packages:
 
