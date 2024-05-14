@@ -2,6 +2,8 @@ from dao.CourierServiceDB import CourierServiceDb
 from entity.Courier import Courier
 from entity.Employee import Employee
 from entity.User import User
+from exception.InvalidEmployeeIDException import InvalidEmployeeIDException
+from exception.TrackingNumberNotFoundException import TrackingNumberNotFoundException
 
 
 class MainModule:
@@ -22,53 +24,56 @@ class MainModule:
         print("6. Get Order Status")
         print("7. Cancel a Courier Order")
 
-        option = input("Enter the Operation number: ")
-        if option == '1':
-            user = MainModule.create_user()
-            if courier_service.add_user(user):
-                print("User added successfully.")
-            else:
-                print("Failed to add user.")
+        try:
+            option = input("Enter the Operation number: ")
+            if option == '1':
+                user = MainModule.create_user()
+                if courier_service.add_user(user):
+                    print("User added successfully.")
+                else:
+                    print("Failed to add user.")
 
-        elif option == '2':
-            MainModule.view_user(courier_service)
+            elif option == '2':
+                MainModule.view_user(courier_service)
 
-        elif option == '3':
-            MainModule.update_user(courier_service)
+            elif option == '3':
+                MainModule.update_user(courier_service)
 
-        elif option == '4':
-            user_id = input("Enter user id to delete: ")
-            if courier_service.delete_user(user_id):
-                print("User deleted successfully.")
-            else:
-                print("Failed to delete user.")
+            elif option == '4':
+                user_id = input("Enter user id to delete: ")
+                if courier_service.delete_user(user_id):
+                    print("User deleted successfully.")
+                else:
+                    print("Failed to delete user.")
 
-        elif option == '5':
-            user_id = input("Insert your user id: ")
-            sender_name = input("Insert Sender name: ")
-            sender_address = input("Insert Sender address: ")
-            receiver_name = input("Insert Receiver name: ")
-            receiver_address = input("Insert receiver address: ")
-            weight = input("Insert weight of the courier: ")
-            status = input("Insert courier status: ")
-            tracking_number = input("Insert tracking number: ")
-            delivery_date = input("Insert delivery date: ")
+            elif option == '5':
+                user_id = input("Insert your user id: ")
+                sender_name = input("Insert Sender name: ")
+                sender_address = input("Insert Sender address: ")
+                receiver_name = input("Insert Receiver name: ")
+                receiver_address = input("Insert receiver address: ")
+                weight = input("Insert weight of the courier: ")
+                status = input("Insert courier status: ")
+                tracking_number = input("Insert tracking number: ")
+                delivery_date = input("Insert delivery date: ")
 
-            courier = Courier(user_id, sender_name, sender_address, receiver_name, receiver_address, weight, status,
-                              tracking_number, delivery_date, [])
-            if courier_service.insert_order(courier):
-                print("Order Placed successfully.")
-            else:
-                print("Failed to Place Order")
+                courier = Courier(user_id, sender_name, sender_address, receiver_name, receiver_address, weight,
+                                  status, tracking_number, delivery_date, [])
+                if courier_service.insert_order(courier):
+                    print("Order Placed successfully.")
+                else:
+                    print("Failed to Place Order")
 
-        elif option == '6':
-            tracking_number = input("Insert tracking id of courier: ")
-            get_status = courier_service.get_order_status(tracking_number)
-            print(get_status)
+            elif option == '6':
+                tracking_number = input("Insert tracking id of courier: ")
+                get_status = courier_service.get_order_status(tracking_number)
+                print(get_status)
 
-        elif option == '7':
-            tracking_number = input("Insert tracking id to cancel the order: ")
-            cancel_order = courier_service.cancel_order(tracking_number)
+            elif option == '7':
+                tracking_number = input("Insert tracking id to cancel the order: ")
+                courier_service.cancel_order(tracking_number)
+        except TrackingNumberNotFoundException as e:
+            print(e)
 
     @staticmethod
     def create_user():
@@ -118,30 +123,33 @@ class MainModule:
         print("2. Update an Employee")
         print("3. Delete an Employee")
 
-        option = input("Enter the Operation Number: ")
-        if option == '1':
-            employee_name = input("Enter Employee Name: ")
-            email = input("Enter E-mail ID: ")
-            mobile_number = input("Enter Mobile No.: ")
-            role = input("Enter Employee's Role: ")
-            salary = input("Enter Employee's Salary: ")
-            employee = Employee(employee_name, email, mobile_number, role, salary, [])
-            courier_service.add_employee(employee)
-            print("Employee added successfully.")
+        try:
+            option = input("Enter the Operation Number: ")
+            if option == '1':
+                employee_name = input("Enter Employee Name: ")
+                email = input("Enter E-mail ID: ")
+                mobile_number = input("Enter Mobile No.: ")
+                role = input("Enter Employee's Role: ")
+                salary = input("Enter Employee's Salary: ")
+                employee = Employee(employee_name, email, mobile_number, role, salary, [])
+                courier_service.add_employee(employee)
+                print("Employee added successfully.")
 
-        elif option == '2':
-            employee_id = input("Enter Employee ID to update: ")
-            employee_name = input("Enter Updated Employee Name: ")
-            email = input("Enter Updated E-mail ID: ")
-            mobile_number = input("Enter Updated Mobile No.: ")
-            role = input("Enter Updated Employee's Role: ")
-            salary = input("Enter Updated Employee's Salary: ")
-            employee = Employee(employee_name, email, mobile_number, role, salary, employee_id)
-            courier_service.update_employee(employee)
+            elif option == '2':
+                employee_id = input("Enter Employee ID to update: ")
+                employee_name = input("Enter Updated Employee Name: ")
+                email = input("Enter Updated E-mail ID: ")
+                mobile_number = input("Enter Updated Mobile No.: ")
+                role = input("Enter Updated Employee's Role: ")
+                salary = input("Enter Updated Employee's Salary: ")
+                employee = Employee(employee_name, email, mobile_number, role, salary, employee_id)
+                courier_service.update_employee(employee)
 
-        elif option == '3':
-            employee_id = input("Enter Employee ID to delete: ")
-            courier_service.delete_employee(employee_id)
+            elif option == '3':
+                employee_id = input("Enter Employee ID to delete: ")
+                courier_service.delete_employee(employee_id)
+        except InvalidEmployeeIDException as e:
+            print(e)
 
     @staticmethod
     def main():
